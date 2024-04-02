@@ -178,7 +178,8 @@ impl eframe::App for GameOfLife {
             });
             ui.separator();});}}
 
-
+// native app
+#[cfg(not(target_arch = "wasm32"))]
 fn main() {
     let options = eframe::NativeOptions::default();
     let _ = eframe::run_native(
@@ -186,4 +187,21 @@ fn main() {
         options,
         Box::new(|_cc| Box::new(GameOfLife::new(20, 42))),
     );
+}
+
+// When compiling to web using trunk:
+#[cfg(target_arch = "wasm32")]
+fn main() {
+    let options = eframe::WebOptions::default();
+
+    wasm_bindgen_futures::spawn_local(async {
+        eframe::WebRunner::new()
+            .start(
+                "the_canvas_id", // hardcode it
+                options,
+                Box::new(|_cc| Box::new(GameOfLife::new(20, 42))),
+            )
+            .await
+            .expect("failed to start eframe");
+    });
 }
