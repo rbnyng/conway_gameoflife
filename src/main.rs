@@ -75,11 +75,12 @@ impl GameOfLife {
         let window_size = ctx.screen_rect().size();
         let cell_size = 10.0; 
         let new_grid_width = (window_size.x / cell_size).floor() as usize;
-        let new_grid_height = (window_size.y / cell_size).floor() as usize;
+        let new_grid_height = new_grid_width;
+    
         if new_grid_width != self.grid.len() || new_grid_height != self.grid[0].len() {
             self.resize_grid(new_grid_width, new_grid_height);
         }
-
+    
         if self.running && Local::now().signed_duration_since(self.last_update) >= Duration::milliseconds(100) {
             self.update_game_logic();
             self.last_update = Local::now();
