@@ -1,10 +1,10 @@
 use eframe::egui;
-use std::time::{Duration, Instant};
+use chrono::{Duration, Local};
 use rand::{rngs::StdRng, Rng, SeedableRng};
 
 struct GameOfLife {
     grid: Vec<Vec<bool>>,
-    last_update: Instant,
+    last_update: chrono::DateTime<Local>,
     running: bool,
     seed: u64,
     seed_input: String, // use this as the input and convert it to the actual seed
@@ -16,7 +16,7 @@ impl GameOfLife {
     fn new(size: usize, seed: u64) -> Self {
         let game = Self {
             grid: vec![vec![false; size]; size],
-            last_update: Instant::now(),
+            last_update: Local::now(),
             running: false,
             seed,
             seed_input: seed.to_string(),
@@ -80,9 +80,9 @@ impl GameOfLife {
             self.resize_grid(new_grid_width, new_grid_height);
         }
 
-        if self.running && self.last_update.elapsed() >= Duration::from_millis(100) {
+        if self.running && Local::now().signed_duration_since(self.last_update) >= Duration::milliseconds(100) {
             self.update_game_logic();
-            self.last_update = Instant::now();
+            self.last_update = Local::now();
         }
     }
 

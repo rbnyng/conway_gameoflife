@@ -29,6 +29,7 @@ eframe = { version = "0.26.0", default-features = false, features = [
 rand = "0.8.5"
 windows = "0.54.0"
 getrandom = { version = "0.2", features = ["js"] }
+chrono = { version = "0.4", features = ["wasmbind"] }
 
 # for webassembly target:
 # build with trunk build --release --public-url . and deploy dist folder
